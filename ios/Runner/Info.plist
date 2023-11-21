@@ -45,10 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	 <key>NSBluetoothAlwaysUsageDescription</key>
-    	<string>Need BLE permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Need BLE permission</string>
     <key>NSBluetoothPeripheralUsageDescription</key>
-    	<string>Need BLE permission</string>
-    <key>NSBonjourServices</key>
+    <string>Need BLE permission</string>
 </dict>
 </plist>

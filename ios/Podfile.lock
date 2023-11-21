@@ -1,0 +1,37 @@
+PODS:
+  - Flutter (1.0.0)
+  - Protobuf (3.24.3)
+  - reactive_ble_mobile (0.0.1):
+    - Flutter
+    - Protobuf (~> 3.5)
+    - SwiftProtobuf (~> 1.0)
+  - SwiftProtobuf (1.23.0)
+  - WechatOpenSDK-XCFramework (2.0.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - reactive_ble_mobile (from `.symlinks/plugins/reactive_ble_mobile/ios`)
+  - WechatOpenSDK-XCFramework
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Protobuf
+    - SwiftProtobuf
+    - WechatOpenSDK-XCFramework
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  reactive_ble_mobile:
+    :path: ".symlinks/plugins/reactive_ble_mobile/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Protobuf: 970f7ee93a3a08e3cf64859b8efd95ee32b4f87f
+  reactive_ble_mobile: 9ce6723d37ccf701dbffd202d487f23f5de03b4c
+  SwiftProtobuf: b70d65f419fbfe61a2d58003456ca5da58e337d6
+  WechatOpenSDK-XCFramework: acdeeda129efbef9532bca8a10c24e1b4b8c7d69
+
+PODFILE CHECKSUM: 7a0f82faf47e7b455084878aec9bc936ebea2774
+
+COCOAPODS: 1.12.1
