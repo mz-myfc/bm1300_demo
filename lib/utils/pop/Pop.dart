@@ -1,3 +1,4 @@
+import 'package:bm1300_demo/utils/tips.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'loading.dart';
@@ -28,5 +29,10 @@ class Pop {
     await SmartDialog.show(
       builder: (_) => LoadAnimation(msg: msg),
     ).timeout(const Duration(minutes: 30), onTimeout: dismiss);
+  }
+
+  void promptPop() async {
+    dismiss();
+    await SmartDialog.show(builder: (_) => const Tips());
   }
 }
