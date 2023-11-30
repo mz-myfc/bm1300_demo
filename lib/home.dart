@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'utils/ble_helper.dart';
 import 'utils/helper.dart';
 import 'utils/notice.dart';
-import 'utils/pop/Pop.dart';
-import 'utils/tips.dart';
+import 'utils/pop/pop.dart';
 
 /*
  * @description HomePage
@@ -41,42 +40,48 @@ class _HomePageState extends State<HomePage> {
         body: ChangeNotifierProvider(
           data: Helper.h,
           child: Consumer<Helper>(
-            builder: (context, helper) => Column(
-              children: [
-
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    MyBox(title: 'SYS', value: helper.sys.intVal, unit: 'mmHg'),
-                    MyBox(title: 'DIA', value: helper.dia.intVal, unit: 'mmHg'),
-                  ],
-                ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    MyBox(title: 'SpO₂', value: helper.spo2.intVal, unit: '%'),
-                    MyBox(title: 'PR', value: helper.pr.intVal, unit: 'bpm'),
-                  ],
-                ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    MyBox(title: 'PI', value: helper.pi.asFixed, unit: ''),
-                  ],
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.warning_outlined, color: Colors.amber),
-                    onPressed: () => Pop.helper.promptPop(),
+            builder: (context, helper) => Container(
+              margin: const EdgeInsets.all(5),
+              child: Column(
+                children: [
+                  HeadView(title: 'Name', value: helper.deviceName),
+                  HeadView(title: 'ID', value: helper.deviceId),
+                  HeadView(title: 'Battery', value: helper.battery.batt),
+                  Divider(color: Colors.purple.shade100),
+                  Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      MyBox(title: 'SYS', value: helper.sys.intVal, unit: 'mmHg'),
+                      MyBox(title: 'DIA', value: helper.dia.intVal, unit: 'mmHg'),
+                    ],
                   ),
-                ),
-                const Spacer(),
-                const Text('v1.0', style: TextStyle(fontSize: 15)),
-                const Text('Shanghai Berry Electronic Tech Co., Ltd.', style: TextStyle(fontSize: 15)),
-                const SizedBox(height: 15), 
-              ],
+                  Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      MyBox(title: 'SpO₂', value: helper.spo2.intVal, unit: '%'),
+                      MyBox(title: 'PR', value: helper.pr.intVal, unit: 'bpm'),
+                    ],
+                  ),
+                  Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      MyBox(title: 'PI', value: helper.pi.asFixed, unit: ''),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 15),
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.warning_outlined, color: Colors.amber),
+                      onPressed: () => Pop.helper.promptPop(),
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text('v1.0', style: TextStyle(fontSize: 15)),
+                  const Text('Shanghai Berry Electronic Tech Co., Ltd.', style: TextStyle(fontSize: 15)),
+                  const SizedBox(height: 15),
+                ],
+              ),
             ),
           ),
         ),
@@ -129,4 +134,29 @@ class MyBox extends StatelessWidget {
           ),
         ),
       );
+}
+
+class HeadView extends StatelessWidget {
+  const HeadView({super.key, required this.title, required this.value});
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: MediaQuery.of(context).size.width,
+    height: 25,
+    padding: const EdgeInsets.symmetric(horizontal: 5),
+    child: Row(
+      children: [
+        Text('$title:', style: const TextStyle(fontSize: 15)),
+        const Spacer(),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 15),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    ),
+  );
 }

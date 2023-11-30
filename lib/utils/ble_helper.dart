@@ -5,7 +5,8 @@ import 'package:bm1300_demo/utils/helper.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import 'ble_device.dart';
-import 'pop/Pop.dart';
+import 'cmd.dart';
+import 'pop/pop.dart';
 
 /*
  * @description Bluetooth
@@ -53,9 +54,9 @@ extension BluetoothExtension on Ble {
         .connectToDevice(
             id: device.id,
             servicesWithCharacteristicsToDiscover: {
-              Uuid.parse("49535343-FE7D-4AE5-8FA9-9FAFD205E455"): [
-                Uuid.parse("49535343-1E4D-4BD9-BA61-23C647249616"),
-                Uuid.parse("49535343-8841-43F4-A8D4-ECBE34729BB3")
+              Cmd.SERVICE_UUID: [
+                Cmd.CHARACTERISTIC_UUID_SEND,
+                Cmd.CHARACTERISTIC_UUID_RECEIVE
               ]
             },
             connectionTimeout: const Duration(seconds: 2))
@@ -72,6 +73,7 @@ extension BluetoothExtension on Ble {
         Pop.helper.loadAnimation(msg: 'connecting...');
         break;
       case DeviceConnectionState.connected:
+        Helper.h.setDeviceInfo(device);
         Pop.helper.dismiss();
         _readAndWrite(device);
         break;
@@ -81,6 +83,7 @@ extension BluetoothExtension on Ble {
         _disconnect();
         Pop.helper.dismiss();
         Pop.helper.toast(msg: 'Bluetooth is disconnected');
+        Helper.h.init();
         break;
     }
   }
@@ -161,19 +164,20 @@ extension BluetoothExtension on Ble {
         case DeviceConnectionState.disconnected:
           await _disconnect();
           Pop.helper.dismiss();
+          Helper.h.init();
           break;
         case DeviceConnectionState.connecting:
           break;
         case DeviceConnectionState.disconnecting:
           break;
       }
-    });
+    }); 
   }
 
   void _readAndWrite(DiscoveredDevice device) {
     final characteristic = QualifiedCharacteristic(
-      serviceId: Uuid.parse("49535343-FE7D-4AE5-8FA9-9FAFD205E455"),
-      characteristicId: Uuid.parse("49535343-1E4D-4BD9-BA61-23C647249616"),
+      serviceId: Cmd.SERVICE_UUID,
+      characteristicId: Cmd.CHARACTERISTIC_UUID_SEND,
       deviceId: device.id,
     );
     ble

@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:sprintf/sprintf.dart';
 
 import 'ble_helper.dart';
 
@@ -24,6 +26,9 @@ class Helper extends ChangeNotifier {
   int spo2 = 0;
   int pr = 0;
   double pi = 0.0;
+  int battery = 0;
+  String deviceName = '--';
+  String deviceId = '--';
 
   Timer? timer;
 
@@ -42,7 +47,11 @@ class Helper extends ChangeNotifier {
     spo2 = 0;
     pr = 0;
     pi = 0.0;
+    battery = 0;
+    deviceName = '--';
+    deviceId = '--';
     isSendCommand = false;
+    notify();
   }
 
   //Bluetooth data analysis
@@ -88,6 +97,7 @@ class Helper extends ChangeNotifier {
     var pi = array[6];
     var sys = array[7];
     var dia = array[8];
+    var battery = array[12];
 
     if (spo2 < 35 || spo2 > 100) spo2 = 0;
     if (pr < 25 || pr > 250) pr = 0;
@@ -95,7 +105,7 @@ class Helper extends ChangeNotifier {
     if (sys < 40 || sys > 230) sys = 0;
     if (dia < 40 || dia > 230) dia = 0;
 
-    _setData(sys, dia, spo2, pr, pi / 10);
+    _setData(sys, dia, spo2, pr, pi / 10, battery);
     _calibrate(sys, dia);
   }
 
@@ -116,18 +126,19 @@ class Helper extends ChangeNotifier {
     }
   }
 
-  void _setData(int sys, int dia, int spo2, int pr, double pi) {
+  void _setData(int sys, int dia, int spo2, int pr, double pi, int battery) {
     this.sys = sys;
     this.dia = dia;
     this.spo2 = spo2;
     this.pr = pr;
     this.pi = pi;
+    this.battery = battery;
   }
 
   //Start the BM1300 refresh interface
   void startTimer() {
     stopTimer();
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
       notify();
     });
   }
@@ -137,9 +148,44 @@ class Helper extends ChangeNotifier {
     timer?.cancel();
     timer = null;
   }
+
+  void setDeviceInfo(DiscoveredDevice device){
+    deviceName = _setBleName(device.name);
+    deviceId = _getMac(device);
+    notify();
+  }
+
+  ///Get Mac, iOS compatible
+  String _getMac(DiscoveredDevice device) {
+    var manufacturerData = device.manufacturerData.toList();
+    if (manufacturerData.length >= 8) {
+      var mac = manufacturerData
+          .sublist(2, 8)
+          .map((e) => e.toRadixString(16).padLeft(2, '0').toUpperCase())
+          .toList();
+      return sprintf('%s:%s:%s:%s:%s:%s', mac).toString();
+    }
+    return device.id.startsWith('00:A0:50') ? device.id : '--';
+  }
+
+
+  //Handles characters that are not recognized by Bluetooth names
+  String _setBleName(String name) {
+    try {
+      if (name.codeUnits.contains(0)) {
+        return String.fromCharCodes(Uint8List.fromList(
+            name.codeUnits.sublist(0, name.codeUnits.indexOf(0))));
+      } else {
+        return name;
+      }
+    } catch (_) {}
+    return '--';
+  }
 }
 
 extension Format on num {
   String get intVal => this > 0 ? '$this' : '--';
-  String get asFixed => this >0 ? toStringAsFixed(1) : '--';
+  String get asFixed => this > 0 ? toStringAsFixed(1) : '--';
+  double get toDou1 => this > 0 ? double.parse(toStringAsFixed(1)) :  0.0;
+  String get batt => this > 0 ? '$this%' : '--';
 }
