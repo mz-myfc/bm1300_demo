@@ -33,7 +33,7 @@ class Ble {
 extension BluetoothExtension on Ble {
   //Scan for Bluetooth devices
   Future<void> startScan() async {
-    Pop.helper.loadAnimation(msg: 'searching...');
+    Pop.helper.loadAnimation(msg: 'Searching...');
     _startTimer(); // Turn on the timer
     await scanSubscription?.cancel();
     scanSubscription = ble.scanForDevices(withServices: []).listen((device) {
@@ -70,7 +70,7 @@ extension BluetoothExtension on Ble {
   void _listener(ConnectionStateUpdate connectionState, DiscoveredDevice device) {
     switch (connectionState.connectionState) {
       case DeviceConnectionState.connecting:
-        Pop.helper.loadAnimation(msg: 'connecting...');
+        Pop.helper.loadAnimation(msg: 'Connecting...');
         break;
       case DeviceConnectionState.connected:
         Helper.h.setDeviceInfo(device);

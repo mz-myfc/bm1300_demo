@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         navigatorObservers: [FlutterSmartDialog.observer],
-        //SmartDialog初始化
         builder: FlutterSmartDialog.init(),
         debugShowCheckedModeBanner: false,
         home: const HomePage(),

@@ -21,11 +21,12 @@ class Helper extends ChangeNotifier {
   List<int> dbpArray = [];
 
   List<int> bufferArray = [];
-  int sys = 0;
-  int dia = 0;
-  int spo2 = 0;
-  int pr = 0;
-  double pi = 0.0;
+  int sys = 0; //Systolic Blood Pressure
+  int dia = 0; //Diastolic Blood Pressure
+  int spo2 = 0; //Oxygen Saturation
+  int pr = 0; //Pulse Rate
+  double pi = 0.0; //Perfusion index
+
   int battery = 0;
   String deviceName = '--';
   String deviceId = '--';
@@ -51,7 +52,7 @@ class Helper extends ChangeNotifier {
     deviceName = '--';
     deviceId = '--';
     isSendCommand = false;
-    notify();
+    refresh();
   }
 
   //Bluetooth data analysis
@@ -88,7 +89,7 @@ class Helper extends ChangeNotifier {
   }
 
   //Notification refresh
-  void notify() => notifyListeners();
+  void refresh() => notifyListeners();
 
   //Read the value
   void _read(List<int> array) {
@@ -139,7 +140,7 @@ class Helper extends ChangeNotifier {
   void startTimer() {
     stopTimer();
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      notify();
+      refresh();
     });
   }
 
@@ -152,7 +153,7 @@ class Helper extends ChangeNotifier {
   void setDeviceInfo(DiscoveredDevice device){
     deviceName = _setBleName(device.name);
     deviceId = _getMac(device);
-    notify();
+    refresh();
   }
 
   ///Get Mac, iOS compatible
