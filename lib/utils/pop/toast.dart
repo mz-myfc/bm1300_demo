@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
  * @date 2023/11/20 14:56
  */
 class ToastPop extends StatelessWidget {
-  const ToastPop({Key? key, required this.msg}) : super(key: key);
+  const ToastPop({super.key, required this.msg});
   final String msg;
 
   @override

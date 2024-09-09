@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   HeadView(title: 'Name', value: helper.deviceName),
                   HeadView(title: 'ID', value: helper.deviceId),
-                  HeadView(title: 'Battery', value: helper.battery.batt),
+                  HeadView(title: 'Battery', value: helper.battery.battery),
                   Divider(color: Colors.purple.shade100),
                   Flex(
                     direction: Axis.horizontal,

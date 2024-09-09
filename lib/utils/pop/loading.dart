@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
  * @date 2023/11/20 14:56
  */
 class LoadAnimation extends StatefulWidget {
-  const LoadAnimation({Key? key, this.msg}) : super(key: key);
+  const LoadAnimation({super.key, this.msg});
   final String? msg;
 
   @override

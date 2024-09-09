@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InheritedProvider<T> extends InheritedWidget {
-  const InheritedProvider({Key? key, required this.data, required Widget child})
-      : super(key: key, child: child);
+  const InheritedProvider({super.key, required this.data, required super.child});
   final T data;
 
   @override
@@ -11,9 +10,7 @@ class InheritedProvider<T> extends InheritedWidget {
 }
 
 class ChangeNotifierProvider<T extends ChangeNotifier> extends StatefulWidget {
-  const ChangeNotifierProvider(
-      {Key? key, required this.data, required this.child})
-      : super(key: key);
+  const ChangeNotifierProvider({super.key, required this.data, required this.child});
   final T data;
   final Widget child;
 
@@ -69,7 +66,7 @@ class _ChangeNotifierProviderState<T extends ChangeNotifier>
 }
 
 class Consumer<T> extends StatelessWidget {
-  const Consumer({Key? key, required this.builder}) : super(key: key);
+  const Consumer({super.key, required this.builder});
   final Widget Function(BuildContext context, T value) builder;
 
   @override

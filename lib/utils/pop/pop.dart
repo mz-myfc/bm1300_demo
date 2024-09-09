@@ -1,6 +1,6 @@
-import 'package:bm1300_demo/utils/tips.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
+import '../tips.dart';
 import 'loading.dart';
 import 'toast.dart';
 

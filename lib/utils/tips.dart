@@ -1,5 +1,6 @@
-import 'package:bm1300_demo/utils/pop/pop.dart';
 import 'package:flutter/material.dart';
+
+import 'pop/pop.dart';
 
 /*
  * @description Tips
