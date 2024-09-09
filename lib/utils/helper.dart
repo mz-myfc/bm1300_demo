@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
-import 'ble_helper.dart';
+import 'ble/ble_helper.dart';
+import 'parse/cnibp_protocol_v1.3.dart';
 
 /*
  * @description Helper
@@ -19,7 +20,6 @@ class Helper extends ChangeNotifier {
   List<int> sbpArray = [];
   List<int> dbpArray = [];
 
-  List<int> bufferArray = [];
   int sys = 0; //Systolic Blood Pressure
   int dia = 0; //Diastolic Blood Pressure
   int spo2 = 0; //Oxygen Saturation
@@ -36,7 +36,7 @@ class Helper extends ChangeNotifier {
   Map<String, dynamic> user = {'sys': 120, 'dia': 80};
 
   void init() {
-    bufferArray = [];
+    CNIBPProtocol.instance.init();
     sbpArray = [];
     dbpArray = [];
     sys = 0;
@@ -51,44 +51,11 @@ class Helper extends ChangeNotifier {
     refresh();
   }
 
-  //Bluetooth data analysis
-  void analysis(List<int> array) {
-    bufferArray += array;
-    var i = 0; //Current index
-    var validIndex = 0; //Valid indexes
-    var maxIndex = bufferArray.length - 20; //Leave at least enough room for a minimum set of data
-    while (i <= maxIndex) {
-      //Failed to match the headers
-      if (bufferArray[i] != 0xFF || bufferArray[i + 1] != 0xAA) {
-        i += 1;
-        validIndex = i;
-        continue;
-      }
-      //The header is successfully matched
-      var total = 0;
-      var checkSum = bufferArray[i + 19];
-      for (var index = 0; index <= 18; index++) {
-        total += bufferArray[i + index];
-      }
-      //If the verification fails, discard the two data
-      if (checkSum != total % 256) {
-        i += 2;
-        validIndex = i;
-        continue;
-      }
-      _read(bufferArray.sublist(i, i + 19));
-      i += 20; //Move back one group
-      validIndex = i;
-      continue;
-    }
-    bufferArray = bufferArray.sublist(validIndex); //Reorganize the cache array, delete all the data before the valid index
-  }
-
   //Notification refresh
   void refresh() => notifyListeners();
 
   //Read the value
-  void _read(List<int> array) {
+  void read(List<int> array) {
     var spo2 = array[4];
     var pr = array[5];
     var pi = array[6];
