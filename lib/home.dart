@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'utils/ble/ble_helper.dart';
+import 'utils/ble/permission.dart';
 import 'utils/helper.dart';
 import 'utils/notice.dart';
 import 'utils/pop/pop.dart';
@@ -21,7 +23,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    WakelockPlus.enable();
     Helper.h.startTimer();
+    Future.delayed(
+        const Duration(seconds: 1), () async => await Ble.helper.bleState());
     super.initState();
   }
 
@@ -33,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.bluetooth),
-              onPressed: () => Ble.helper.startScan(),
+              onPressed: () => PermissionHelper.helper.scanBluetooth(),
             ),
           ],
         ),
@@ -89,6 +94,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    WakelockPlus.disable();
     Helper.h.stopTimer();
     super.dispose();
   }

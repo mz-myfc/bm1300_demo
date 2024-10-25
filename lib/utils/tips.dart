@@ -23,7 +23,7 @@ class Tips extends StatelessWidget {
         child: Column(
           children: [
             const Text(
-              'This Demo does not add permission prompts, please open it manually before use. \n\n'
+              'Description of permissions. \n\n'
               'Android:\n'
               '1. Please turn on the Bluetooth permission of your phone;\n'
               '2. Please allow the APP to use Bluetooth;\n'
